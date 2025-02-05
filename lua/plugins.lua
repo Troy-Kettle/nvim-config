@@ -1,51 +1,59 @@
-return require('packer').startup(function(use)
-    -- Plugin manager
-    use 'wbthomason/packer.nvim'
 
-    -- Plugins
-    use 'github/copilot.vim'
-    use 'tpope/vim-commentary'
-    use 'neovim/nvim-lspconfig'
+-- This file sets up your plugins using packer.nvim
+return require("packer").startup(function(use)
+    -- Plugin Manager
+    use "wbthomason/packer.nvim"
+
+    -- Colorscheme: Catppuccin
+    use { "catppuccin/nvim", as = "catppuccin" }
+
+    -- File icons (used by lualine, etc.)
+    use "kyazdani42/nvim-web-devicons"
+
+    -- Statusline: lualine
     use {
-        'nvim-telescope/telescope.nvim',
-        requires = { 'nvim-lua/plenary.nvim' }
+        "nvim-lualine/lualine.nvim",
+        requires = { "kyazdani42/nvim-web-devicons" },
     }
 
-    -- TreeSitter
+    -- Which-key: Keybinding helper
+    use "folke/which-key.nvim"
+
+    -- Indent guides: indent-blankline
+    use "lukas-reineke/indent-blankline.nvim"
+
+    -- GitHub Copilot
+    use "github/copilot.vim"
+
+    -- Commentary: Easy commenting
+    use "tpope/vim-commentary"
+
+    -- LSP Configurations
+    use "neovim/nvim-lspconfig"
+
+    -- Telescope: Fuzzy Finder
     use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        "nvim-telescope/telescope.nvim",
+        requires = { "nvim-lua/plenary.nvim" },
+    }
+
+    -- Treesitter for better syntax highlighting and code understanding
+    use {
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate",
         config = function()
-            require('nvim-treesitter.configs').setup {
-                -- A list of parser names, or "all"
+            require("nvim-treesitter.configs").setup {
+                -- List of parsers to install
                 ensure_installed = {
-                    "lua",
-                    "vim",
-                    "python",
-                    "javascript",
-                    "typescript",
-                    "json",
-                    "html",
-                    "css",
+                    "lua", "vim", "python", "javascript", "typescript", "json", "html", "css"
                 },
-
-                -- Install parsers synchronously (only applied to `ensure_installed`)
                 sync_install = false,
-
-                -- Automatically install missing parsers when entering buffer
                 auto_install = true,
-
                 highlight = {
-                    -- `false` will disable the whole extension
                     enable = true,
-
-                    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
                     additional_vim_regex_highlighting = false,
                 },
-
                 indent = { enable = true },
-
-                -- Optional: Enable incremental selection
                 incremental_selection = {
                     enable = true,
                     keymaps = {
@@ -56,17 +64,15 @@ return require('packer').startup(function(use)
                     },
                 },
             }
-        end
+        end,
     }
 
-    -- Auto pairs
+    -- Auto pairs: Automatically insert matching brackets, quotes, etc.
     use {
         "windwp/nvim-autopairs",
         config = function()
             require("nvim-autopairs").setup {}
-        end
+        end,
     }
-
-    -- Colorscheme
-    use 'craftzdog/solarized-osaka.nvim' -- Solarized Osaka colorscheme
 end)
+
