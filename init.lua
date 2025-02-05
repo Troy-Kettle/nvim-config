@@ -7,7 +7,7 @@ vim.opt.number = true                -- Show line numbers
 vim.opt.relativenumber = true        -- Relative line numbers
 vim.opt.expandtab = true             -- Use spaces instead of tabs
 vim.opt.tabstop = 4                  -- Spaces per tab
-vim.opt.shiftwidth = 4               -- Indent size
+vim.opt.shiftwidth = 4               -- Indentation size
 vim.opt.smartindent = true           -- Auto-indent new lines
 vim.opt.wrap = false                 -- Disable line wrap
 vim.opt.ignorecase = true            -- Case-insensitive search...
@@ -15,21 +15,20 @@ vim.opt.smartcase = true             -- ...unless uppercase is used
 vim.opt.termguicolors = true         -- True color support
 vim.opt.background = "dark"          -- Dark background
 
--- Load Plugins (this file loads lua/plugins.lua)
+-- Load Plugins (from lua/plugins.lua)
 require("plugins")
 
--- Setup Catppuccin Colorscheme
+-- Catppuccin Colorscheme Setup (with lualine integration disabled)
 require("catppuccin").setup({
     flavour = "mocha",               -- Options: "mocha", "macchiato", "frappe", "latte"
     transparent_background = false,
     term_colors = true,
     integrations = {
-        lualine = true,
+        lualine = false,             -- Disabled to prevent the error
         telescope = true,
         treesitter = true,
         which_key = true,
         indent_blankline = true,
-        -- Add more integrations if needed
     },
 })
 vim.cmd("colorscheme catppuccin")
@@ -40,27 +39,27 @@ vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<CR>",  { desc = "Liv
 vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<CR>",    { desc = "Buffers" })
 vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<CR>",  { desc = "Help Tags" })
 
--- LSP Configuration (Example for Python using pyright)
+-- LSP Setup (example: Pyright for Python)
 local lspconfig = require("lspconfig")
 lspconfig.pyright.setup {}
 
 -- UI Enhancements
 
--- Statusline: lualine configured to use the Catppuccin theme
+-- Statusline: lualine using its own configuration
 require("lualine").setup {
     options = {
-        theme = "catppuccin",
+        theme = "catppuccin",  -- Using Catppuccin theme (if available) or choose another
         section_separators = "",
         component_separators = "│",
     },
 }
 
--- Which-key: Displays available keybindings in a popup
+-- Which-key for keybinding hints
 require("which-key").setup {}
 
--- Indent Guides: Show vertical lines for indentation
+-- Indent Guides: indent-blankline configuration
 vim.opt.list = true
-vim.opt.listchars:append "space:⋅"   -- Optionally display spaces as dots
+vim.opt.listchars:append "space:⋅"  -- Optional: show spaces as dots
 require("indent_blankline").setup {
     char = "│",
     show_trailing_blankline_indent = false,

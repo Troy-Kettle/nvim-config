@@ -1,5 +1,4 @@
 
--- This file sets up your plugins using packer.nvim
 return require("packer").startup(function(use)
     -- Plugin Manager
     use "wbthomason/packer.nvim"
@@ -7,7 +6,7 @@ return require("packer").startup(function(use)
     -- Colorscheme: Catppuccin
     use { "catppuccin/nvim", as = "catppuccin" }
 
-    -- File icons (used by lualine, etc.)
+    -- File icons for statusline, etc.
     use "kyazdani42/nvim-web-devicons"
 
     -- Statusline: lualine
@@ -16,16 +15,18 @@ return require("packer").startup(function(use)
         requires = { "kyazdani42/nvim-web-devicons" },
     }
 
-    -- Which-key: Keybinding helper
+    -- Which-key for keybinding hints
     use "folke/which-key.nvim"
 
-    -- Indent guides: indent-blankline
+    -- Indent Guides: indent-blankline
     use "lukas-reineke/indent-blankline.nvim"
+    -- If you need to pin an older version, you can do something like:
+    -- use { "lukas-reineke/indent-blankline.nvim", commit = "YOUR_DESIRED_COMMIT_HASH" }
 
     -- GitHub Copilot
     use "github/copilot.vim"
 
-    -- Commentary: Easy commenting
+    -- Commentary for commenting out code
     use "tpope/vim-commentary"
 
     -- LSP Configurations
@@ -43,7 +44,6 @@ return require("packer").startup(function(use)
         run = ":TSUpdate",
         config = function()
             require("nvim-treesitter.configs").setup {
-                -- List of parsers to install
                 ensure_installed = {
                     "lua", "vim", "python", "javascript", "typescript", "json", "html", "css"
                 },
