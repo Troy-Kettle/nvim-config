@@ -1,5 +1,8 @@
 
--- Force-load packer.nvim (this should be the very first line)
+-- Set the leader key to space before any mappings
+vim.g.mapleader = " "
+
+-- Force-load packer.nvim (this should be the very first line for plugins)
 vim.cmd [[packadd packer.nvim]]
 
 -- Basic Editor Settings
@@ -12,6 +15,7 @@ vim.opt.smartindent = true          -- Smart autoindenting
 vim.opt.wrap = false                -- Disable line wrap
 vim.opt.termguicolors = true        -- Enable true colors
 vim.opt.background = "dark"         -- Set dark background
+vim.g.netrw_list_hide = '.*\\.swp$'  -- Hide swap files in netrw
 
 -- Load Plugins (from lua/plugins.lua)
 require('plugins')

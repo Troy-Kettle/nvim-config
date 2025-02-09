@@ -16,12 +16,11 @@ return require('packer').startup(function(use)
     use "folke/which-key.nvim"
 
    -- Telescope: Fuzzy Finder
-    use {
-        "nvim-telescope/telescope.nvim",
-        requires = { "nvim-lua/plenary.nvim" }
-    }
+   use {
+        'nvim-telescope/telescope.nvim',
+        requires = { {'nvim-lua/plenary.nvim'} }
+    }    -- Treesitter: Enhanced syntax highlighting and code parsing
 
-    -- Treesitter: Enhanced syntax highlighting and code parsing
     use {
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate"
