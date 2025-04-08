@@ -1,4 +1,3 @@
-
 -- Set the leader key to space before any mappings
 vim.g.mapleader = " "
 
@@ -48,4 +47,8 @@ local lspconfig_status, lspconfig = pcall(require, "lspconfig")
 if lspconfig_status then
     lspconfig.pyright.setup {}
 end
+
+-- init.lua
+vim.keymap.set("i", "<CapsLock>", "<Esc>")  -- in insert mode, caps lock = escape
+
 
