@@ -20,8 +20,8 @@ vim.g.netrw_list_hide = '.*\\.swp$'  -- Hide swap files in netrw
 -- Load Plugins (from lua/plugins.lua)
 require('plugins')
 
--- Colorscheme Setup: Try to load 'catppuccin'; if not available, fallback to 'desert'
-local status, _ = pcall(vim.cmd, "colorscheme catppuccin")
+-- Try to load Rose Pine; if not available, fallback to desert
+local status, _ = pcall(vim.cmd, "colorscheme rose-pine")
 if not status then
     vim.cmd("colorscheme desert")
 end
