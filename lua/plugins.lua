@@ -5,6 +5,11 @@ return require('packer').startup(function(use)
 
     -- Colorscheme: Catppuccin
     use { "catppuccin/nvim", as = "catppuccin" }
+    
+    use 'rose-pine/neovim'
+
+    -- Inside your plugins.lua file, add:
+    use 'rebelot/kanagawa.nvim'
 
     -- Statusline: lualine (with icon support)
     use {
