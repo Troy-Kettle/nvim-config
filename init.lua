@@ -1,7 +1,6 @@
 -- Space before any mappings
 vim.g.mapleader = " "
--- Force-load packer.nvim (this should be the very first line for plugins)
-vim.cmd [[packadd packer.nvim]]
+
 -- Basic Editor Settings
 vim.opt.number = true               -- Enable line numbers
 vim.opt.relativenumber = true       -- Relative line numbers
@@ -13,35 +12,73 @@ vim.opt.wrap = false                -- Disable line wrap
 vim.opt.termguicolors = true        -- Enable true colors
 vim.opt.background = "dark"         -- Set dark background
 vim.g.netrw_list_hide = '.*\\.swp$'  -- Hide swap files in netrw
+
+-- Bootstrap packer if not installed
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
+end
+
+local packer_bootstrap = ensure_packer()
+
+-- Force-load packer.nvim
+vim.cmd [[packadd packer.nvim]]
+
 -- Load Plugins (from lua/plugins.lua)
 require('plugins')
 
--- Configure rose-pine
-require('rose-pine').setup({
-    dark_variant = 'main',
-    bold_vert_split = false,
-    dim_nc_background = false,
-    disable_background = false,
-    disable_float_background = false,
-    disable_italics = false,
-    highlight_groups = {
-        Comment = { italic = true },
-        Keyword = { italic = true },
-        Statement = { bold = true },
-    },
-})
+-- Configure Catppuccin
+local catppuccin_status, catppuccin = pcall(require, 'catppuccin')
+if catppuccin_status then
+    catppuccin.setup({
+        flavour = "mocha", -- latte, frappe, macchiato, mocha
+        term_colors = true,
+        transparent_background = false,
+        no_italic = false,
+        no_bold = false,
+        styles = {
+            comments = { "italic" },
+            conditionals = { "italic" },
+            loops = {},
+            functions = {},
+            keywords = { "bold" },
+            strings = {},
+            variables = {},
+            numbers = {},
+            booleans = {},
+            properties = {},
+            types = {},
+        },
+        integrations = {
+            cmp = true,
+            telescope = true,
+            which_key = true,
+        },
+    })
 
--- Try to load rose-pine; if not available, fallback to desert
-local status, _ = pcall(vim.cmd, "colorscheme rose-pine")
-if not status then
+    -- Try to load catppuccin
+    local colorscheme_status, _ = pcall(vim.cmd, "colorscheme catppuccin")
+    if not colorscheme_status then
+        print("Failed to load catppuccin colorscheme")
+        vim.cmd("colorscheme desert")
+    end
+else
+    print("Catppuccin plugin not found. Make sure it's installed correctly.")
     vim.cmd("colorscheme desert")
 end
 
 -- Setup lualine (Statusline)
-if pcall(require, "lualine") then
-    require("lualine").setup {
+local lualine_status, lualine = pcall(require, "lualine")
+if lualine_status then
+    lualine.setup {
         options = {
-            theme = "rose-pine",
+            theme = "catppuccin",
             section_separators = "",
             component_separators = "|",
         },
@@ -49,10 +86,10 @@ if pcall(require, "lualine") then
 end
 
 -- Directly set up Python LSP (without using newer plugins)
-local lsp_status, _ = pcall(require, "lspconfig")
+local lsp_status, lspconfig = pcall(require, "lspconfig")
 if lsp_status then
     -- Setup Python LSP (pyright)
-    require('lspconfig').pyright.setup {
+    lspconfig.pyright.setup {
         on_attach = function(client, bufnr)
             -- Enable completion triggered by <c-x><c-o>
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -99,10 +136,13 @@ if cmp_status then
 end
 
 -- Telescope Keymaps (Fuzzy Finder)
-vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { noremap = true, silent = true })
+local telescope_status, _ = pcall(require, "telescope")
+if telescope_status then
+    vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { noremap = true, silent = true })
+end
 
 -- CapsLock to Escape in insert mode (Note: This may not work in all terminals)
 vim.api.nvim_set_keymap("i", "<CapsLock>", "<Esc>", { noremap = true })
@@ -117,4 +157,9 @@ end
 local autopairs_status, autopairs = pcall(require, "nvim-autopairs")
 if autopairs_status then
     autopairs.setup {}
+end
+
+-- Run :PackerSync if we just bootstrapped packer
+if packer_bootstrap then
+    require('packer').sync()
 end

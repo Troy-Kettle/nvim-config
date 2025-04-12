@@ -1,11 +1,12 @@
+-- This file should be saved to ~/.config/nvim/lua/plugins.lua
 return require('packer').startup(function(use)
     -- Let packer manage itself
     use "wbthomason/packer.nvim"
     
     -- Colorschemes
-    use { "catppuccin/nvim", as = "catppuccin" }
-    use 'rose-pine/neovim'  -- Without the 'as' parameter to match existing installation
+    use { "catppuccin/nvim", as = "catppuccin" } -- Primary theme
     use "rebelot/kanagawa.nvim"
+    -- use { "rose-pine/neovim", as = "rose-pine" } -- Commented out, using catppuccin instead
     
     -- Statusline: lualine (with icon support)
     use {
